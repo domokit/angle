@@ -65,26 +65,26 @@ constexpr char g_fragment_shader[] = R"GLSL(
   }
 )GLSL";
 
-void DefineBindingSymbol(GLSLGenerator& gen,
+void DefineBindingSymbol(GLSLGenerator& generator,
                          const std::string& symbol,
                          BindingType binding_type) {
   switch (binding_type) {
     case BindingType::kNone:
-      gen.DefineSymbol(symbol, "BINDING_NONE");
+      generator.DefineSymbol(symbol, "BINDING_NONE");
       break;
     case BindingType::kConstant:
-      gen.DefineSymbol(symbol, "BINDING_CONSTANT");
+      generator.DefineSymbol(symbol, "BINDING_CONSTANT");
       break;
   }
 }
 
-void DefineMaskSymbol(GLSLGenerator& gen, Modifier::Mask mask) {
+void DefineMaskSymbol(GLSLGenerator& generator, Modifier::Mask mask) {
   switch (mask) {
     case Modifier::Mask::kNone:
-      gen.DefineSymbol("MASK", "MASK_NONE");
+      generator.DefineSymbol("MASK", "MASK_NONE");
       break;
     case Modifier::Mask::kCircular:
-      gen.DefineSymbol("MASK", "MASK_CIRCULAR");
+      generator.DefineSymbol("MASK", "MASK_CIRCULAR");
       break;
   }
 }
@@ -108,7 +108,7 @@ void MaterialShader::Bind(const Material& material,
                           const Modifier& modifier) const {
   if (descriptor_.color_binding_type == BindingType::kConstant) {
     const glm::vec4& color = material.color().constant_value();
-    glUniform4f(color_, color.x, color.y, color.z, color.w);
+    glUniform4fv(color_, 1, &color[0]);
   }
 }
 
@@ -146,10 +146,11 @@ bool MaterialShader::Compile() {
 }
 
 std::string MaterialShader::GeneratePrologue() {
-  GLSLGenerator gen;
-  DefineBindingSymbol(gen, "COLOR_BINDING", descriptor_.color_binding_type);
-  DefineMaskSymbol(gen, descriptor_.mask);
-  return gen.GenerateCode();
+  GLSLGenerator generator;
+  DefineBindingSymbol(generator, "COLOR_BINDING",
+                      descriptor_.color_binding_type);
+  DefineMaskSymbol(generator, descriptor_.mask);
+  return generator.GenerateCode();
 }
 
 }  // namespace escher

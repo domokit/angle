@@ -18,7 +18,7 @@ UniqueProgram MakeUniqueProgram(UniqueShader vertex_shader,
 
   GLint link_status;
   glGetProgramiv(program.id(), GL_LINK_STATUS, &link_status);
-  if (link_status == GL_TRUE)
+  if (link_status)
     return program;
 
   GLint info_log_length;

@@ -19,7 +19,7 @@ UniqueShader CompileShader(GLenum type,
 
   GLint compile_status;
   glGetShaderiv(shader.id(), GL_COMPILE_STATUS, &compile_status);
-  if (compile_status == GL_TRUE)
+  if (compile_status)
     return shader;
 
 #ifndef NDEBUG

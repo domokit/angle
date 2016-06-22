@@ -9,7 +9,7 @@
 
 namespace {
 
-constexpr float kFabSize = 28.0f;
+constexpr float kFabSize = 56.0f;
 
 }  // namespace
 
@@ -62,7 +62,7 @@ escher::Model AppTestScene::GetModel(const escher::SizeI& size,
       &green_material_);
 
   // null
-  objects.emplace_back(escher::Shape::CreateRect(glm::vec2(160.0f, 290.0f),
+  objects.emplace_back(escher::Shape::CreateRect(glm::vec2(20.0f, 290.0f),
                                                  glm::vec2(40.0f, 40.0f), 2.0f),
                        &null_material_);
 
@@ -70,7 +70,7 @@ escher::Model AppTestScene::GetModel(const escher::SizeI& size,
   objects.emplace_back(
       escher::Shape::CreateCircle(
           glm::vec2(focus.x - kFabSize / 2.0f, focus.y - kFabSize / 2.0f),
-          kFabSize, 6.0f),
+          kFabSize / 2.0f, 6.0f),
       &fab_material_);
 
   return escher::Model(std::move(objects));
